@@ -1,6 +1,6 @@
 # Visual production
 
-The plates are original AI-generated stills from Codex's built-in image generation. The scene components move the camera through the plates, animate the dashboard, and composite a compact monochrome heads-up display. No product footage, third-party images, or real app screenshots are bundled.
+The plates are original AI-generated stills from Codex's built-in image generation. The scene components move the camera through the plates, animate thread triage and the engineering workflow, and composite a compact monochrome heads-up display. No product footage, third-party images, or real app screenshots are bundled.
 
 | Plate | Generation brief |
 |---|---|
@@ -13,6 +13,6 @@ The plates are original AI-generated stills from Codex's built-in image generati
 | `city.jpg` | Eye-level pedestrian arcade, charcoal facades, glass reflections, distant walker and late afternoon light. |
 | `hero.jpg` | Front-facing Even G2 A and faceted R1, graphite plinth, silver rim light, open black space at left. Match the reference outlines; no added cameras, emitters or logos. |
 
-All backgrounds are landscape with no baked text. The portrait cut repositions the camera crops and rebuilds the dashboard layout and typographic compositions at 9:16. For the ring and end-card renders, [the G2 A product image](https://cdn.shopify.com/s/files/1/0600/4513/1891/files/even-g2-a-smart-glasses-front-view-closed-grey.png) and [the R1 product image](https://cdn.shopify.com/s/files/1/0600/4513/1891/files/even-r1-smart-ring-top-45-degree-view.png) served as reference images only. The in-view graphics are inspired by [Even Hub's device documentation](https://hub.evenrealities.com/docs/build/device-apis), not simulated optics.
+All backgrounds are landscape with no baked text. The footbridge, cafe, and city plates remain available from the original cut. The portrait cut repositions the camera crops and rebuilds the dashboard layout and typographic compositions at 9:16. For the ring and end-card renders, [the G2 A product image](https://cdn.shopify.com/s/files/1/0600/4513/1891/files/even-g2-a-smart-glasses-front-view-closed-grey.png) and [the R1 product image](https://cdn.shopify.com/s/files/1/0600/4513/1891/files/even-r1-smart-ring-top-45-degree-view.png) served as reference images only. The in-view graphics are inspired by [Even Hub's device documentation](https://hub.evenrealities.com/docs/build/device-apis), not simulated optics.
 
 Typeface files are installed through npm: [Inter](https://github.com/rsms/inter) and [IBM Plex Mono](https://github.com/IBM/plex), both SIL Open Font License 1.1. T3 Code is MIT licensed; Even Hub SDK and packaging tools and Remotion retain their own terms.

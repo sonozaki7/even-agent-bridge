@@ -1,77 +1,67 @@
 [
   {
     "start": 0.43,
-    "end": 3.16,
-    "text": "AI coding agents can work without you watching."
+    "end": 4.41,
+    "text": "Let me show you what I want to do with G2, alongside T3 Code."
   },
   {
-    "start": 3.4,
-    "end": 5.23,
-    "text": "So why are we still tied to a desk?"
+    "start": 6.32,
+    "end": 10.11,
+    "text": "T3 Code separates settled work from threads that need your input."
   },
   {
-    "start": 6.41,
-    "end": 9.59,
-    "text": "Picture this. In T3 Code, I start three agents."
+    "start": 10.22,
+    "end": 13.38,
+    "text": "Agents build, test, and merge under repo rules."
   },
   {
-    "start": 9.99,
-    "end": 12.58,
-    "text": "One builds, one tests, and one reviews."
+    "start": 14.24,
+    "end": 17.58,
+    "text": "Here, I’m moving our mobile Sync API to version two."
   },
   {
-    "start": 14.29,
-    "end": 15.44,
-    "text": "Then I walk away."
+    "start": 17.71,
+    "end": 20.55,
+    "text": "But older clients still read version one cursors."
   },
   {
-    "start": 16.0,
-    "end": 18.8,
-    "text": "With Even G2, I'd see which agent needs me,"
+    "start": 21.35,
+    "end": 24.36,
+    "text": "Retire version one now, and those clients lose sync."
   },
   {
-    "start": 18.88,
-    "end": 20.33,
-    "text": "right in my field of view."
+    "start": 24.73,
+    "end": 26.89,
+    "text": "G2 could show me just that decision."
   },
   {
-    "start": 21.63,
-    "end": 23.3,
-    "text": "Tests are done. What's next?"
+    "start": 27.19,
+    "end": 30.75,
+    "text": "With R1, I’d confirm: keep v1 for one release."
   },
   {
-    "start": 23.95,
-    "end": 27.37,
-    "text": "A tap on the R1 ring could select “Run final checks.”"
+    "start": 31.5,
+    "end": 35.2,
+    "text": "Agents add compatibility and regression-test both versions."
   },
   {
-    "start": 28.27,
-    "end": 29.84,
-    "text": "The agent takes it from there."
+    "start": 35.3,
+    "end": 37.76,
+    "text": "Then they merge the pull request under policy."
   },
   {
-    "start": 31.56,
-    "end": 34.65,
-    "text": "No laptop. No phone. Just the update I need,"
+    "start": 38.0,
+    "end": 40.7,
+    "text": "The thread is settled. No routine approvals."
   },
   {
-    "start": 35.79,
-    "end": 36.78,
-    "text": "when I need it."
+    "start": 41.54,
+    "end": 43.32,
+    "text": "Only the decisions that need you."
   },
   {
-    "start": 37.65,
-    "end": 39.18,
-    "text": "The rest of the day is mine."
-  },
-  {
-    "start": 41.49,
-    "end": 44.42,
-    "text": "Your agents keep working. Your world keeps moving."
-  },
-  {
-    "start": 45.59,
-    "end": 48.9,
-    "text": "That's the experience I want to build for Even Realities."
+    "start": 45.52,
+    "end": 48.05,
+    "text": "That’s what I want to build with Even Realities."
   }
 ]

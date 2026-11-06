@@ -32,23 +32,32 @@ MODEL_REVISION = "a71e4d38b236d968966a2002c4c895dbd12b1c3c"
 # Caption slot start, hard end, caption text, voice speed. The actual caption
 # end is derived from rendered samples, not the planned end of the slot.
 SCRIPT = [
-    (0.46, 3.22, "AI coding agents can work without you watching.", 1.03),
-    (3.43, 6.0, "So why are we still tied to a desk?", 0.99),
-    (6.44, 9.66, "Picture this. In T3 Code, I start three agents.", 1.0),
-    (10.02, 13.52, "One builds, one tests, and one reviews.", 0.95),
-    (14.32, 15.77, "Then I walk away.", 0.97),
-    (16.03, 18.81, "With Even G2, I'd see which agent needs me,", 1.03),
-    (18.91, 21.03, "right in my field of view.", 0.98),
-    (21.66, 23.56, "Tests are done. What's next?", 0.98),
-    (23.98, 27.57, "A tap on the R1 ring could select “Run final checks.”", 1.02),
-    (28.30, 30.65, "The agent takes it from there.", 0.97),
-    (31.59, 35.79, "No laptop. No phone. Just the update I need,", 0.99),
-    (35.82, 37.31, "when I need it.", 0.97),
-    (37.68, 40.33, "The rest of the day is mine.", 0.95),
-    (41.52, 45.05, "Your agents keep working. Your world keeps moving.", 0.95),
-    (45.62, 49.68, "That's the experience I want to build for Even Realities.", 0.98),
+    (0.46, 5.81, "Let me show you what I want to do with G2, alongside T3 Code.", 0.98),
+    (
+        6.35,
+        10.13,
+        "T3 Code separates settled work from threads that need your input.",
+        0.98,
+    ),
+    (10.25, 13.68, "Agents build, test, and merge under repo rules.", 0.98),
+    (14.27, 17.62, "Here, I’m moving our mobile Sync API to version two.", 1.01),
+    (17.74, 20.90, "But older clients still read version one cursors.", 0.99),
+    (21.38, 24.65, "Retire version one now, and those clients lose sync.", 0.99),
+    (24.76, 27.13, "G2 could show me just that decision.", 1.0),
+    (27.22, 30.76, "With R1, I’d confirm: keep v1 for one release.", 0.98),
+    (31.53, 35.2, "Agents add compatibility and regression-test both versions.", 0.99),
+    (35.33, 37.97, "Then they merge the pull request under policy.", 0.99),
+    (38.03, 40.87, "The thread is settled. No routine approvals.", 0.99),
+    (41.57, 44.99, "Only the decisions that need you.", 0.92),
+    (45.55, 49.23, "That’s what I want to build with Even Realities.", 0.96),
 ]
-PRONUNCIATION = {"T3": "Tee three", "G2": "Gee two", "R1": "R one", "AI": "A.I."}
+PRONUNCIATION = {
+    "T3": "Tee three",
+    "G2": "Gee two",
+    "R1": "R one",
+    "v1": "version one",
+    "API": "A.P.I.",
+}
 
 
 def ffmpeg(*args: str) -> None:
@@ -374,10 +383,13 @@ def mix(
             "256k",
             str(audio_dir / "master-mix.mp3"),
         )
-    srt = "\n\n".join(
-        f"{i}\n{stamp(c['start'])} --> {stamp(c['end'])}\n{c['text']}"
-        for i, c in enumerate(captions, start=1)
-    ) + "\n"
+    srt = (
+        "\n\n".join(
+            f"{i}\n{stamp(c['start'])} --> {stamp(c['end'])}\n{c['text']}"
+            for i, c in enumerate(captions, start=1)
+        )
+        + "\n"
+    )
     (output / "subtitles.srt").write_text(srt, encoding="utf-8")
     captions_path.parent.mkdir(parents=True, exist_ok=True)
     captions_path.write_text(

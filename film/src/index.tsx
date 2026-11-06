@@ -3,18 +3,18 @@ import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "./style.css";
 import {AbsoluteFill, Audio, Composition, Sequence, interpolate, registerRoot, staticFile, useCurrentFrame} from "remotion";
-import {Dashboard} from "./scenes/Dashboard";
-import {Departure, FirstPerson, Interaction, Montage, Open, Reveal} from "./scenes/Story";
+import {AutonomousRun, EngineeringThread, Triage} from "./scenes/Engineering";
+import {Departure, Interaction, Open, Reveal} from "./scenes/Story";
 import {clamp, ff, fps, useTall} from "./ui";
 import captions from "./captions.json";
 
 const sceneTable = [
   [0,6,Open],
-  [6,14,Dashboard],
-  [14,17.3,Departure],
-  [17.3,21,FirstPerson],
+  [6,14,Triage],
+  [14,19.4,EngineeringThread],
+  [19.4,21,Departure],
   [21,31,Interaction],
-  [31,41,Montage],
+  [31,41,AutonomousRun],
   [41,50,Reveal],
 ] as const;
 
@@ -28,7 +28,7 @@ function Captions() {
 function Film() {
   const f=useCurrentFrame();
   const tall=useTall();
-  const cutPulse=[6,14,17.3,41].reduce((n,at)=>Math.max(n,
+  const cutPulse=[6,14,19.4,31,41].reduce((n,at)=>Math.max(n,
     interpolate(f,[ff(at)-5,ff(at),ff(at)+9],[0,.72,0],clamp)),0);
   const black=Math.max(cutPulse,interpolate(f,[0,13],[1,0],clamp),interpolate(f,[ff(49.3),1499],[0,1],clamp));
   return <AbsoluteFill className={tall?"film tall":"film"}>

@@ -2,120 +2,107 @@ import {AbsoluteFill, Sequence, useCurrentFrame} from "remotion";
 import {Disclosure, Enter, Eyebrow, InterfaceScan, Mark, Plate, ff, phase, useTall} from "../ui";
 
 export function Open() {
-  const f=useCurrentFrame();
-  const tall=useTall();
   return <>
     <Plate name="desk" focusTall="76% center" seconds={6} pan={-13}/>
     <AbsoluteFill className="lead-vignette"/>
     <div className="folio"><Mark/><span>AGENT RELAY<br/><b>PRODUCT CONCEPT</b></span></div>
-    <div className="lead">
-      <Enter delay={5}><Eyebrow>THE NEXT INTERFACE</Eyebrow></Enter>
-      <Enter delay={12}><h1>The future of coding<br className="desktop-only"/> doesn’t need<br className="desktop-only"/> a desk.</h1></Enter>
+    <div className="lead opening">
+      <Enter delay={7} duration={16}><div className="opening-intro">Let me show you</div></Enter>
+      <Enter delay={10} duration={22}><h1>what I want to do<br/>with G2,<br/><em>alongside T3 Code.</em></h1></Enter>
     </div>
-    {!tall&&<div className="telemetry" style={{opacity:phase(f,26,59)}}>
-      <span><i/> BUILD</span><span><i/> TEST</span><span><i/> REVIEW</span>
-    </div>}
   </>;
 }
 
 export function Departure() {
   return <>
-    <Plate name="departure" focusTall="71% center" seconds={3.3} pan={-8} zoom={.12}/>
+    <Plate name="departure" focusTall="71% center" seconds={1.6} pan={-4} zoom={.04}/>
     <AbsoluteFill className="lead-vignette" style={{opacity:.74}}/>
     <div className="lead departure">
-      <Enter delay={8}><Eyebrow>02 / STEP OUT</Eyebrow></Enter>
-      <Enter delay={14}><h1>Leave the desk.<br/>Not the work.</h1></Enter>
+      <Enter delay={1} duration={12}><Eyebrow>03 / ONE QUESTION. NOT A STATUS FEED.</Eyebrow></Enter>
     </div>
   </>;
 }
 
-type HudKind = "overview"|"alert"|"queued"|"build"|"review"|"final";
+type HudKind = "risk"|"decision"|"answered";
 
 function Hud({kind}:{kind:HudKind}) {
   const f=useCurrentFrame();
-  const text:Record<HudKind,[string,string,string]> = {
-    overview:["T3 CODE  /  AGENT RELAY","3 agents active","Build · Tests · Review"],
-    alert:["CODEX  /  TEST RUNNER","Tests complete.","›  Run final checks"],
-    queued:["CODEX  /  TEST RUNNER","Final checks running","✓  Request confirmed"],
-    build:["CODEX  /  BUILD","UI build complete","✓  Ready for review"],
-    review:["CLAUDE CODE  /  REVIEW","Review ready","2 notes for later"],
-    final:["CODEX  /  TEST RUNNER","Final checks passed","✓  Nothing needs you"],
-  };
-  const [head, title, note]=text[kind];
-  const x=phase(f,4,21);
-  return <div className={`hud hud-${kind}`} style={{opacity:x,transform:`translate3d(0,${12*(1-x)}px,0)`}}>
+  const select=phase(f,ff(1.05),ff(1.25));
+  const x=phase(f,kind==="risk"?8:0,kind==="risk"?21:11);
+  return <div className={`hud decision-hud hud-${kind}`} style={{opacity:x,transform:`translate3d(0,${10*(1-x)}px,0) rotateX(-2deg)`}}>
     <span className="hud-corner top-left"/><span className="hud-corner bottom-right"/>
-    <div className="hud-kicker"><Mark size={26}/>{head}</div>
-    <div className="hud-title">{title}</div>
-    <div className={`hud-note ${kind==="alert"?"hud-choice":""}`}>{note}</div>
-    <InterfaceScan at={5} duration={21} top={-7} bottom={-7}/>
+    <div className="hud-kicker"><Mark size={26}/>{kind==="answered"?"SYNC API V2":"T3 CODE  /  NEEDS YOUR INPUT"}</div>
+    {kind==="risk"&&<>
+      <div className="hud-title">Mobile Sync API v2</div>
+      <div className="hud-note">Older apps lose sync<br/>if v1 is retired now.</div>
+    </>}
+    {kind==="decision"&&<>
+      <div className="hud-title">Keep older apps syncing?</div>
+      <div className="hud-options">
+        <div className="hud-option" style={{background:`rgba(184,253,168,${.06+select*.15})`,borderColor:`rgba(184,253,168,${.2+select*.8})`}}><span>{select>.5?"›":"○"}</span> Keep v1 for one release</div>
+        <div className="hud-option hud-option-secondary"><span>○</span> Retire v1 now</div>
+      </div>
+    </>}
+    {kind==="answered"&&<>
+      <div className="hud-title">Answer sent <span aria-hidden="true">✓</span></div>
+      <div className="hud-note">Keep v1 for one release</div>
+      <div className="hud-detail">Migration continues</div>
+    </>}
+    <InterfaceScan at={kind==="risk"?8:2} duration={15} top={-7} bottom={-7}/>
   </div>;
 }
 
-function Pov({name="pov",kind,seconds,focusTall="52% center",position,offset=0}:{
-  name?:string;kind:HudKind;seconds:number;focusTall?:string;position?:"left";offset?:number;
-}) {
+function Pov({kind,offset=0}:{kind:HudKind;offset?:number}) {
   return <>
-    <Plate name={name} focusTall={focusTall} seconds={seconds} offset={offset} pan={-15} shade={.16} walk={name==="bridgewalk"||name==="city"}/>
-    <div className={`hud-stage ${position==="left"?"hud-stage-left":""}`}><Hud kind={kind}/></div>
+    <Plate name="pov" focusTall="52% center" seconds={10} offset={offset} pan={-15} shade={.18}/>
+    <div className="hud-stage"><Hud kind={kind}/></div>
     <Disclosure/>
   </>;
 }
 
 function Ring() {
   const f=useCurrentFrame();
-  const selected=phase(f,ff(.9),ff(1.2));
-  const pulse=phase(f,ff(.9),ff(1.65));
+  const pulse=phase(f,ff(.4),ff(1.35));
+  const confirmed=phase(f,ff(.4),ff(.68));
   return <>
-    <Plate name="ring" focusTall="68% center" seconds={2.6} pan={-15} zoom={.11}/>
+    <Plate name="ring" focusTall="68% center" seconds={2.65} pan={-15} zoom={.11}/>
     <AbsoluteFill className="lead-vignette" style={{opacity:.8}}/>
-    <div className="ring-cue">
-      <Enter delay={2}><Eyebrow>EVEN R1 / CONCEPT INPUT</Eyebrow></Enter>
-      <Enter delay={7}><div className="ring-action" style={{background:`rgba(143,232,131,${.07+selected*.16})`, borderColor:`rgba(184,253,168,${.27+selected*.5})`}}>
-        <div className="touch-orb" style={{boxShadow:`0 0 0 ${pulse*24}px rgba(184,253,168,${selected*(1-pulse)*.4})`}}/>
-        Run final checks
+    <div className="ring-cue ring-decision">
+      <Enter delay={1} duration={14}><Eyebrow>EVEN R1 / ANSWER THREAD</Eyebrow></Enter>
+      <Enter delay={2} duration={16}><div className="ring-action" style={{background:`rgba(143,232,131,${.08+confirmed*.17})`, borderColor:`rgba(184,253,168,${.38+confirmed*.48})`}}>
+        <div className="touch-orb" style={{boxShadow:`0 0 0 ${pulse*24}px rgba(184,253,168,${confirmed*(1-pulse)*.52})`}}/>
+        Keep v1 for one release
       </div></Enter>
-      <Enter delay={10}><div className="ring-note">{f<ff(.9)?"Select on ring":"Confirm before sending"}</div></Enter>
+      <Enter delay={5} duration={17}><div className="ring-note">{f<ff(.6)?"Press to send answer":"Compatibility decision confirmed"}</div></Enter>
     </div>
     <Disclosure/>
   </>;
 }
 
-export function FirstPerson() {
-  return <Pov kind="overview" seconds={7.5}/>;
-}
-
 export function Interaction() {
   return <>
-    <Sequence from={0} durationInFrames={ff(3.8)}><Pov kind="alert" seconds={7.5} offset={3.7}/></Sequence>
-    <Sequence from={ff(3.8)} durationInFrames={ff(2.6)}><Ring/></Sequence>
-    <Sequence from={ff(6.4)} durationInFrames={ff(3.6)}><Pov name="pov" kind="queued" seconds={3.6} focusTall="60% center"/></Sequence>
-  </>;
-}
-
-export function Montage() {
-  return <>
-    <Sequence from={0} durationInFrames={ff(3.3)}><Pov name="bridgewalk" kind="build" seconds={3.3} focusTall="55% center"/></Sequence>
-    <Sequence from={ff(3.3)} durationInFrames={ff(3.4)}><Pov name="cafe" kind="review" position="left" seconds={3.4} focusTall="66% center"/></Sequence>
-    <Sequence from={ff(6.7)} durationInFrames={ff(3.3)}><Pov name="city" kind="final" seconds={3.3} focusTall="51% center"/></Sequence>
+    <Sequence from={0} durationInFrames={ff(3.65)}><Pov kind="risk"/></Sequence>
+    <Sequence from={ff(3.65)} durationInFrames={ff(6)-ff(3.65)}><Pov kind="decision" offset={3.65}/></Sequence>
+    <Sequence from={ff(6)} durationInFrames={ff(8.65)-ff(6)}><Ring/></Sequence>
+    <Sequence from={ff(8.65)} durationInFrames={ff(10)-ff(8.65)}><Pov kind="answered" offset={8.65}/></Sequence>
   </>;
 }
 
 export function Reveal({cover=false}:{cover?:boolean}) {
   const f=useCurrentFrame();
   const tall=useTall();
-  const a=cover?1:phase(f,7,35);
-  const b=cover?1:phase(f,17,50);
+  const a=cover?1:phase(f,6,25);
+  const b=cover?1:phase(f,10,36);
   return <>
     {tall?<div className="portrait-hero"><Plate name="hero" focusTall="99% center" seconds={9} pan={-6} zoom={.037}/></div>:<Plate name="hero" seconds={9} pan={-9} zoom={.046}/>}
     <AbsoluteFill className="reveal-vignette"/>
     <div className="folio"><Mark/><span>AGENT RELAY<br/><b>INDEPENDENT CONCEPT</b></span></div>
-    <div className="reveal-copy">
+    <div className="reveal-copy revised-reveal">
       <div style={{opacity:a}}><Eyebrow>T3 CODE × EVEN G2 × EVEN R1</Eyebrow></div>
       <h1 style={{opacity:b,transform:`translateY(${(1-b)*24}px)`}}>
-        {cover?<>The future of coding<br/>doesn’t need a desk.</>:<>Your agents<br/>keep working.<br/><em>Your world<br/>keeps moving.</em></>}
+        Only the decisions<br/><em>that need you.</em>
       </h1>
-      {!cover&&<div className="credit" style={{opacity:phase(f,ff(4.7),ff(5.7))}}>CONCEPT FILM <span>·</span> AI-GENERATED NARRATION<br/>SIMULATED INTERACTIONS <span>·</span> NO HARDWARE TEST</div>}
+      {cover?<div className="hero-deck">A G2 and R1 concept for T3 Code.</div>:<div className="credit" style={{opacity:phase(f,ff(4.7),ff(5.7))}}>CONCEPT FILM <span>·</span> AI-GENERATED NARRATION<br/>SIMULATED INTERACTIONS <span>·</span> NO HARDWARE TEST</div>}
     </div>
   </>;
 }

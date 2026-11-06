@@ -4,9 +4,11 @@
 
 Agent Relay is an independent Even Hub prototype for checking on coding agents without opening a laptop or taking out a phone. T3 Code still runs the agents on your workstation. Its mobile app remains the place to read the full conversation and make decisions. The wearable concept adds a quieter interface for short status updates.
 
-[![The Future of Coding Doesn't Need a Desk — 50-second concept film](output/thumbnail.png)](https://github.com/sonozaki7/even-agent-bridge/releases/tag/v0.1.0)
+[![Only the decisions that need you — a 50-second G2 and R1 concept for T3 Code](output/thumbnail.png)](https://github.com/sonozaki7/even-agent-bridge/releases/tag/v0.1.1)
 
-**[Watch the 50-second concept film and download the prototype](https://github.com/sonozaki7/even-agent-bridge/releases/tag/v0.1.0)** · [Film credits and editable source](output/README.md)
+**[Watch the revised concept film](https://github.com/sonozaki7/even-agent-bridge/releases/tag/v0.1.1)** · [Film credits and editable source](output/README.md) · [Download the separate v0.1.0 prototype](https://github.com/sonozaki7/even-agent-bridge/releases/download/v0.1.0/agent-relay.ehpk)
+
+The film opens with “Let me show you what I want to do with G2, alongside T3 Code.” It follows a mobile sync migration where the developer makes one compatibility decision, while agents handle the implementation, regression tests, and a merge allowed by existing repository rules. The film is a vision for the integration, not a recording of the current prototype.
 
 ## What you can try
 

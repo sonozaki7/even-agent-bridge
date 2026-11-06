@@ -1,59 +1,51 @@
 1
-00:00:00,430 --> 00:00:03,160
-AI coding agents can work without you watching.
+00:00:00,430 --> 00:00:04,410
+Let me show you what I want to do with G2, alongside T3 Code.
 
 2
-00:00:03,400 --> 00:00:05,230
-So why are we still tied to a desk?
+00:00:06,320 --> 00:00:10,110
+T3 Code separates settled work from threads that need your input.
 
 3
-00:00:06,410 --> 00:00:09,590
-Picture this. In T3 Code, I start three agents.
+00:00:10,220 --> 00:00:13,380
+Agents build, test, and merge under repo rules.
 
 4
-00:00:09,990 --> 00:00:12,580
-One builds, one tests, and one reviews.
+00:00:14,240 --> 00:00:17,580
+Here, I’m moving our mobile Sync API to version two.
 
 5
-00:00:14,290 --> 00:00:15,440
-Then I walk away.
+00:00:17,710 --> 00:00:20,550
+But older clients still read version one cursors.
 
 6
-00:00:16,000 --> 00:00:18,800
-With Even G2, I'd see which agent needs me,
+00:00:21,350 --> 00:00:24,360
+Retire version one now, and those clients lose sync.
 
 7
-00:00:18,880 --> 00:00:20,330
-right in my field of view.
+00:00:24,730 --> 00:00:26,890
+G2 could show me just that decision.
 
 8
-00:00:21,630 --> 00:00:23,300
-Tests are done. What's next?
+00:00:27,190 --> 00:00:30,750
+With R1, I’d confirm: keep v1 for one release.
 
 9
-00:00:23,950 --> 00:00:27,370
-A tap on the R1 ring could select “Run final checks.”
+00:00:31,500 --> 00:00:35,200
+Agents add compatibility and regression-test both versions.
 
 10
-00:00:28,270 --> 00:00:29,840
-The agent takes it from there.
+00:00:35,300 --> 00:00:37,760
+Then they merge the pull request under policy.
 
 11
-00:00:31,560 --> 00:00:34,650
-No laptop. No phone. Just the update I need,
+00:00:38,000 --> 00:00:40,700
+The thread is settled. No routine approvals.
 
 12
-00:00:35,790 --> 00:00:36,780
-when I need it.
+00:00:41,540 --> 00:00:43,320
+Only the decisions that need you.
 
 13
-00:00:37,650 --> 00:00:39,180
-The rest of the day is mine.
-
-14
-00:00:41,490 --> 00:00:44,420
-Your agents keep working. Your world keeps moving.
-
-15
-00:00:45,590 --> 00:00:48,900
-That's the experience I want to build for Even Realities.
+00:00:45,520 --> 00:00:48,050
+That’s what I want to build with Even Realities.
