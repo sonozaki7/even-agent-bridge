@@ -4,11 +4,11 @@
 
 Agent Relay is an independent Even Hub prototype for checking on coding agents without opening a laptop or taking out a phone. T3 Code still runs the agents on your workstation. Its mobile app remains the place to read the full conversation and make decisions. The wearable concept adds a quieter interface for short status updates.
 
-[![Only the decisions that need you — a 50-second G2 and R1 concept for T3 Code](output/thumbnail.png)](https://github.com/sonozaki7/even-agent-bridge/releases/tag/v0.1.1)
+[![Only the work that needs you — an 82-second G2 and R1 concept for T3 Code](output/thumbnail.png)](https://github.com/sonozaki7/even-agent-bridge/releases/tag/v0.1.2)
 
-**[Watch the revised concept film](https://github.com/sonozaki7/even-agent-bridge/releases/tag/v0.1.1)** · [Film credits and editable source](output/README.md) · [Download the separate v0.1.0 prototype](https://github.com/sonozaki7/even-agent-bridge/releases/download/v0.1.0/agent-relay.ehpk)
+**[Watch the new Japan concept film](https://github.com/sonozaki7/even-agent-bridge/releases/tag/v0.1.2)** · [Film credits and editable source](output/README.md) · [Download the separate v0.1.0 prototype](https://github.com/sonozaki7/even-agent-bridge/releases/download/v0.1.0/agent-relay.ehpk)
 
-The film opens with “Let me show you what I want to do with G2, alongside T3 Code.” It follows a mobile sync migration where the developer makes one compatibility decision, while agents handle the implementation, regression tests, and a merge allowed by existing repository rules. The film is a vision for the integration, not a recording of the current prototype.
+One task, one conversation. T3 Code keeps the work in separate threads. In the film, a developer puts one decision aside on a walk, reopens it while **waiting for the Shinkansen**, asks what happens to older phones, and confirms an answer using the ring. The film illustrates a future integration; it is not a recording of the current prototype.
 
 ## What you can try
 

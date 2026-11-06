@@ -3,49 +3,65 @@
 Let me show you what I want to do with G2, alongside T3 Code.
 
 2
-00:00:06,320 --> 00:00:10,110
-T3 Code separates settled work from threads that need your input.
+00:00:05,270 --> 00:00:09,530
+In T3 Code, a thread is one job and the conversation around it.
 
 3
-00:00:10,220 --> 00:00:13,380
-Agents build, test, and merge under repo rules.
+00:00:09,690 --> 00:00:12,580
+Most threads can keep moving, or finish, without me.
 
 4
-00:00:14,240 --> 00:00:17,580
-Here, I’m moving our mobile Sync API to version two.
+00:00:13,090 --> 00:00:15,400
+I only get a nudge when there’s a choice to make.
 
 5
-00:00:17,710 --> 00:00:20,550
-But older clients still read version one cursors.
+00:00:17,520 --> 00:00:20,460
+On a walk, I stop and open the note in my glasses.
 
 6
-00:00:21,350 --> 00:00:24,360
-Retire version one now, and those clients lose sync.
+00:00:22,550 --> 00:00:25,640
+I’m not ready to decide, so I tap Later on the ring.
 
 7
-00:00:24,730 --> 00:00:26,890
-G2 could show me just that decision.
+00:00:29,290 --> 00:00:32,190
+Waiting for the Shinkansen, I reopen the thread.
 
 8
-00:00:27,190 --> 00:00:30,750
-With R1, I’d confirm: keep v1 for one release.
+00:00:32,650 --> 00:00:35,900
+Newer phones are ready. Older phones need more testing.
 
 9
-00:00:31,500 --> 00:00:35,200
-Agents add compatibility and regression-test both versions.
+00:00:36,790 --> 00:00:40,050
+Give newer phones the new search first, or wait for everyone?
 
 10
-00:00:35,300 --> 00:00:37,760
-Then they merge the pull request under policy.
+00:00:41,230 --> 00:00:44,980
+Before I choose, I ask: will search still work on older phones?
 
 11
-00:00:38,000 --> 00:00:40,700
-The thread is settled. No routine approvals.
+00:00:46,250 --> 00:00:49,850
+Later, the answer comes back. Yes. They’ll keep today’s search.
 
 12
-00:00:41,540 --> 00:00:43,320
-Only the decisions that need you.
+00:00:51,320 --> 00:00:54,910
+Good. I choose Newer phones first, and confirm the reply.
 
 13
-00:00:45,520 --> 00:00:48,050
-That’s what I want to build with Even Realities.
+00:00:56,810 --> 00:00:59,850
+That’s my decision. The agents can take it from here.
+
+14
+00:01:02,360 --> 00:01:04,900
+Back in conversation, nothing interrupts.
+
+15
+00:01:06,370 --> 00:01:09,900
+At a pause: no decisions waiting. The agents are testing.
+
+16
+00:01:12,210 --> 00:01:16,080
+The checks pass, and the change merges under rules already in place.
+
+17
+00:01:17,870 --> 00:01:19,500
+Only the work that needs you.

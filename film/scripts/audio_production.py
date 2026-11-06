@@ -8,7 +8,7 @@
 #   "en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl",
 # ]
 # ///
-"""Generate the 50-second dialogue, original score, mix and caption timeline."""
+"""Generate the 82-second dialogue, original score, mix and caption timeline."""
 
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ import numpy as np
 import soundfile as sf
 
 RATE = 48_000
-DURATION = 50
+DURATION = 82
 FILM = Path(__file__).resolve().parents[1]
 MODEL_ID = "mlx-community/Kokoro-82M-bf16"
 MODEL_REVISION = "a71e4d38b236d968966a2002c4c895dbd12b1c3c"
@@ -32,31 +32,54 @@ MODEL_REVISION = "a71e4d38b236d968966a2002c4c895dbd12b1c3c"
 # Caption slot start, hard end, caption text, voice speed. The actual caption
 # end is derived from rendered samples, not the planned end of the slot.
 SCRIPT = [
-    (0.46, 5.81, "Let me show you what I want to do with G2, alongside T3 Code.", 0.98),
+    (0.46, 4.94, "Let me show you what I want to do with G2, alongside T3 Code.", 0.98),
     (
-        6.35,
-        10.13,
-        "T3 Code separates settled work from threads that need your input.",
+        5.30,
+        9.61,
+        "In T3 Code, a thread is one job and the conversation around it.",
         0.98,
     ),
-    (10.25, 13.68, "Agents build, test, and merge under repo rules.", 0.98),
-    (14.27, 17.62, "Here, I’m moving our mobile Sync API to version two.", 1.01),
-    (17.74, 20.90, "But older clients still read version one cursors.", 0.99),
-    (21.38, 24.65, "Retire version one now, and those clients lose sync.", 0.99),
-    (24.76, 27.13, "G2 could show me just that decision.", 1.0),
-    (27.22, 30.76, "With R1, I’d confirm: keep v1 for one release.", 0.98),
-    (31.53, 35.2, "Agents add compatibility and regression-test both versions.", 0.99),
-    (35.33, 37.97, "Then they merge the pull request under policy.", 0.99),
-    (38.03, 40.87, "The thread is settled. No routine approvals.", 0.99),
-    (41.57, 44.99, "Only the decisions that need you.", 0.92),
-    (45.55, 49.23, "That’s what I want to build with Even Realities.", 0.96),
+    (9.72, 13.01, "Most threads can keep moving, or finish, without me.", 0.96),
+    (13.12, 16.81, "I only get a nudge when there’s a choice to make.", 0.97),
+    (17.55, 21.96, "On a walk, I stop and open the note in my glasses.", 0.96),
+    (22.58, 27.61, "I’m not ready to decide, so I tap Later on the ring.", 0.94),
+    (29.32, 32.53, "Waiting for the Shinkansen, I reopen the thread.", 0.97),
+    (32.68, 36.61, "Newer phones are ready. Older phones need more testing.", 0.98),
+    (
+        36.82,
+        40.84,
+        "Give newer phones the new search first, or wait for everyone?",
+        1.00,
+    ),
+    (
+        41.26,
+        45.82,
+        "Before I choose, I ask: will search still work on older phones?",
+        0.97,
+    ),
+    (
+        46.28,
+        50.71,
+        "Later, the answer comes back. Yes. They’ll keep today’s search.",
+        0.97,
+    ),
+    (51.35, 56.51, "Good. I choose Newer phones first, and confirm the reply.", 0.95),
+    (56.84, 61.41, "That’s my decision. The agents can take it from here.", 0.95),
+    (62.39, 65.97, "Back in conversation, nothing interrupts.", 0.96),
+    (66.40, 71.71, "At a pause: no decisions waiting. The agents are testing.", 0.95),
+    (
+        72.24,
+        77.54,
+        "The checks pass, and the change merges under rules already in place.",
+        0.96,
+    ),
+    (77.90, 80.54, "Only the work that needs you.", 0.91),
 ]
 PRONUNCIATION = {
     "T3": "Tee three",
     "G2": "Gee two",
     "R1": "R one",
-    "v1": "version one",
-    "API": "A.P.I.",
+    "Shinkansen": "[Shinkansen](/ʃˈɪŋkɑnsˌɛn/)",
 }
 
 
@@ -142,7 +165,7 @@ def synth_dialogue(tts, voice: str) -> tuple[np.ndarray, list[dict]]:
 class Score:
     def __init__(self) -> None:
         self.song = np.zeros((samples(DURATION), 2), dtype=np.float32)
-        self.rng = np.random.default_rng(2305)
+        self.rng = np.random.default_rng(67215)
 
     def add(
         self, wave: np.ndarray, start: float, gain: float, pan: float = 0.0
@@ -230,93 +253,151 @@ class Score:
         self.add(noise * envelope, apex - before, gain * 0.68, -0.6)
         self.add(np.roll(noise, 325) * envelope, apex - before, gain, 0.62)
 
+    def felt(self, start: float, note: int, gain: float, pan: float) -> None:
+        """Soft struck key, with inharmonic upper partials and stereo room tail."""
+        t = self.t(2.4)
+        hz = 440 * 2 ** ((note - 69) / 12)
+        q = 2 * np.pi * hz * t
+        tone = np.zeros_like(t)
+        for partial, detune, level, decay in [
+            (1, 0.0, 0.80, 0.72),
+            (2, 0.001, 0.22, 0.39),
+            (3, 0.002, 0.13, 0.27),
+            (4, 0.004, 0.065, 0.16),
+            (6, 0.007, 0.028, 0.13),
+        ]:
+            tone += (
+                level
+                * np.sin(q * partial * (1 + detune) + partial / 3)
+                * np.exp(-t / decay)
+            )
+        tone *= ramp(t, 0, 0.013) * (1 - ramp(t, 2.1, 2.4))
+        self.add(tone, start, gain, pan)
+        for delay, cross_pan, level in [
+            (0.13, -0.63, 0.18),
+            (0.24, 0.62, 0.11),
+            (0.38, -0.25, 0.055),
+        ]:
+            self.add(tone, start + delay, gain * level, cross_pan)
+
+    def texture(self, start: float, duration: float, mode: str, gain: float) -> None:
+        """Procedural outdoor, platform, and room air; no recorded sound."""
+        t = self.t(duration)
+        edge = ramp(t, 0, 0.8) * (1 - ramp(t, duration - 1.0, duration))
+        for sign in (-1, 1):
+            raw = self.rng.normal(0, 1, len(t))
+            f = np.fft.rfftfreq(len(t), 1 / RATE)
+            low, high = {"walk": (135, 860), "platform": (60, 640), "room": (115, 420)}[
+                mode
+            ]
+            # Smooth band-shaping keeps air below the narrator's clarity range.
+            band = (1 - np.exp(-((f / low) ** 2))) * np.exp(-((f / high) ** 2))
+            tone = np.fft.irfft(np.fft.rfft(raw) * band, len(t))
+            if mode == "platform":
+                phase = 2 * np.pi * (49 * t + 0.26 * np.sin(2 * np.pi * 0.17 * t))
+                tone += (
+                    0.045
+                    * (np.sin(phase) + 0.23 * np.sin(2.01 * phase))
+                    * (0.9 + 0.1 * np.cos(2 * np.pi * 0.93 * t))
+                )
+            self.add(tone * edge, start, gain, 0.65 * sign)
+
     def chime(self, start: float, notes: list[int], gain: float) -> None:
         for i, note in enumerate(notes):
             self.pluck(
-                start + i * 0.092, note, gain / (1 + i * 0.22), (-1) ** i * 0.37, 0.28
+                start + i * 0.108, note, gain / (1 + i * 0.25), (-1) ** i * 0.27, 0.22
             )
 
 
 def synth_score() -> np.ndarray:
     s = Score()
-    # F major / D minor color, slow-fading layers with shared notes. Motif
-    # follows the edit: distant opening, sharper pulse, open-air lift, resolve.
-    pads = [
-        (0.0, 7.1, [38, 57, 60, 64], 0.033),
-        (5.8, 8.9, [34, 53, 57, 60, 64], 0.039),
-        (13.4, 8.6, [41, 55, 60, 64, 69], 0.034),
-        (20.4, 6.0, [36, 55, 58, 62], 0.031),
-        (25.4, 6.4, [38, 53, 57, 60, 64], 0.037),
-        (30.2, 5.9, [34, 53, 57, 60, 64], 0.042),
-        (34.6, 5.3, [36, 55, 57, 62], 0.041),
-        (38.5, 4.1, [40, 55, 60, 62], 0.034),
-        (40.85, 9.15, [41, 53, 57, 60, 64], 0.054),
-        (41.10, 8.9, [48, 67, 69, 72, 76], 0.018),
+    # Airy D-major score. Add-nine voicings give the scenes room to breathe;
+    # the same felt-key figure follows the thread from screen to street to platform.
+    chords = [
+        (0.0, 6.65, [38, 57, 61, 64, 66], 0.025),
+        (5.05, 7.82, [43, 54, 59, 62, 69], 0.031),
+        (11.25, 6.96, [35, 54, 57, 61, 62], 0.028),
+        (16.61, 6.98, [40, 55, 59, 62, 66], 0.023),
+        (22.0, 7.92, [45, 55, 57, 59, 64], 0.025),
+        (28.55, 7.98, [38, 57, 61, 64, 66], 0.038),
+        (35.1, 6.85, [42, 57, 59, 62, 66], 0.031),
+        (40.65, 6.74, [43, 54, 57, 59, 62], 0.028),
+        (46.1, 6.33, [40, 55, 59, 62, 66], 0.025),
+        (50.9, 6.72, [35, 54, 57, 61, 62], 0.029),
+        (56.23, 7.33, [45, 55, 57, 59, 64], 0.031),
+        (61.54, 11.24, [38, 54, 61, 64], 0.019),
+        (71.25, 8.12, [43, 54, 59, 62, 69], 0.034),
+        (77.15, 4.85, [38, 54, 57, 61, 64, 66], 0.041),
     ]
-    for row in pads:
+    for row in chords:
         s.pad(*row)
-    beat = 2 / 3
-    for index in range(2, 61):
-        moment = index * beat
-        if (
-            13.4 < moment < 16.7
-            or 20.7 < moment < 22.0
-            or 26.85 < moment < 28.3
-            or moment > 40.4
-        ):
-            continue
-        if index % 2 == 0:
-            s.kick(moment, 0.078 if moment < 6 else (0.138 if moment > 30 else 0.10))
-        if 6.0 <= moment and index % 4 in (1, 3):
-            s.brush(moment + 0.02, 0.15 if moment > 30 else 0.105, 0.27)
-        if 6.0 <= moment and index % 4 in (1, 2, 3):
-            s.brush(moment + beat / 2, 0.067, -0.44, 0.060)
+
     for base, notes, gain in [
-        (0.11, [62, 69, 64], 0.054),
-        (6.07, [60, 65, 69, 72, 64, 69], 0.046),
-        (9.4, [60, 65, 69, 72, 64, 65], 0.052),
-        (14.06, [64, 69, 72, 76], 0.041),
-        (17.38, [60, 64, 67, 69, 72], 0.046),
-        (22.02, [62, 67, 70, 74], 0.032),
-        (28.1, [60, 65, 69, 74, 76], 0.039),
-        (31.08, [65, 69, 72, 76, 77, 81], 0.055),
-        (34.43, [67, 72, 74, 79, 81, 84], 0.050),
-        (37.80, [64, 67, 72, 76, 79], 0.044),
-        (41.04, [65, 72, 76, 81], 0.078),
-        (46.17, [69, 72, 77], 0.043),
+        (0.08, [66, 73, 76], 0.076),
+        (5.0, [67, 71, 74, 81], 0.069),
+        (10.9, [66, 69, 73, 74], 0.059),
+        (16.98, [64, 67, 71, 78], 0.062),
+        (22.3, [64, 69, 71], 0.041),
+        (29.03, [66, 73, 76, 81], 0.080),
+        (34.8, [66, 69, 73, 78], 0.062),
+        (40.95, [67, 71, 74], 0.056),
+        (46.04, [66, 71, 74, 76], 0.062),
+        (51.06, [66, 69, 73, 74], 0.060),
+        (57.1, [64, 69, 71, 76], 0.066),
+        (62.1, [61, 66], 0.033),
+        (68.9, [64, 69], 0.029),
+        (72.0, [67, 71, 74, 78], 0.074),
+        (77.62, [66, 73, 76, 81], 0.076),
     ]:
         for i, note in enumerate(notes):
-            s.pluck(
-                base + (0.0, 0.67, 1.32, 1.99, 2.32, 2.66)[i],
+            s.felt(
+                base + (0.0, 0.58, 1.51, 2.53)[i],
                 note,
-                gain * (1 - 0.067 * i),
-                (-1) ** i * 0.34,
+                gain * (1 - 0.11 * i),
+                (-1) ** i * 0.35,
             )
+
+    # A muted brushed pulse enters at the desk and picks up on the platform.
+    # Leave both walking and conversation free of a metronomic beat.
+    for start, bars, gain in [(5.03, 5, 0.076), (29.0, 13, 0.092), (72.0, 2, 0.08)]:
+        for i in range(bars):
+            at = start + i * 2.5
+            s.kick(at, gain)
+            s.brush(at + 0.61, gain * 0.71, -0.21, 0.075)
+            if i % 2:
+                s.kick(at + 1.25, gain * 0.58)
+            s.brush(at + 1.88, gain * 0.86, 0.28, 0.09)
+
+    s.texture(16.7, 12.7, "walk", 0.066)
+    s.texture(28.0, 34.8, "platform", 0.064)
+    s.texture(61.85, 10.6, "room", 0.061)
+
     for apex, before, after, gain in [
-        (6.0, 0.64, 0.36, 0.10),
-        (14.0, 0.9, 0.65, 0.14),
-        (17.30, 0.37, 0.60, 0.06),
-        (31.0, 0.72, 0.28, 0.12),
-        (34.3, 0.25, 0.26, 0.08),
-        (37.7, 0.28, 0.27, 0.08),
-        (41.0, 1.15, 0.97, 0.23),
-        (45.7, 0.57, 0.60, 0.065),
+        (5.0, 0.45, 0.33, 0.071),
+        (17.0, 0.54, 0.63, 0.078),
+        (29.0, 0.85, 0.61, 0.137),
+        (41.0, 0.36, 0.29, 0.057),
+        (46.12, 0.63, 0.28, 0.063),
+        (51.0, 0.53, 0.41, 0.052),
+        (62.0, 0.67, 0.53, 0.054),
+        (72.0, 0.56, 0.48, 0.080),
+        (77.62, 0.7, 0.53, 0.095),
     ]:
         s.air(apex, before, after, gain)
     for at, notes, gain in [
-        (17.30, [72, 77], 0.045),
-        (21.30, [74, 77], 0.14),
-        (25.70, [74], 0.095),
-        (27.40, [72, 77, 81], 0.12),
-        (34.34, [77], 0.042),
-        (37.74, [79], 0.047),
-        (45.70, [72, 77], 0.053),
+        (19.20, [73, 76], 0.066),  # Open on glasses.
+        (25.30, [66], 0.046),  # Later: no send tone.
+        (31.05, [73, 76], 0.059),  # Reopen the same thread.
+        (44.90, [73, 78], 0.071),  # Question sent.
+        (46.30, [71, 76], 0.070),  # Answer returns after the time cut.
+        (53.40, [73], 0.052),  # Select an option.
+        (57.50, [74, 78, 81], 0.075),  # Reply sent, not a permission grant.
+        (73.75, [74, 78], 0.054),  # Tests / merge proof.
     ]:
         s.chime(at, notes, gain)
-    s.kick(41.01, 0.19, long=True)
-    s.kick(45.7, 0.075, long=True)
+    s.kick(77.63, 0.11, long=True)
     time = np.arange(samples(DURATION)) / RATE
-    s.song *= (ramp(time, 0, 0.14) * (1 - ramp(time, 48.95, 49.99)))[:, None]
+    s.song *= (ramp(time, 0, 0.14) * (1 - ramp(time, 79.6, DURATION - 0.01)))[:, None]
     return s.song
 
 

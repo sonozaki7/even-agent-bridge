@@ -1,6 +1,6 @@
-# Only the Decisions That Need You
+# Only the Work That Needs You
 
-A 50-second independent concept film for **T3 Code × Even G2 × Even R1**.
+An 82-second independent concept film for **T3 Code × Even G2 × Even R1**.
 
 > Let me show you what I want to do with G2, alongside T3 Code.
 
@@ -12,22 +12,25 @@ A 50-second independent concept film for **T3 Code × Even G2 × Even R1**.
 | Voice stem | `narration.wav` · 48 kHz, mono |
 | English captions | [`subtitles.srt`](subtitles.srt) · both films also include open captions |
 
-Get the exported files from the [GitHub release](https://github.com/sonozaki7/even-agent-bridge/releases/tag/v0.1.1). The source ships with the final sound mix and short phrase captions, so rendering does not require a speech provider.
+Get the exported files from the [GitHub release](https://github.com/sonozaki7/even-agent-bridge/releases/tag/v0.1.2). The source ships with the final sound mix and short phrase captions, so rendering does not require a speech provider.
 
-## The engineering story
+## One decision, across a day
 
-1. **Triage in T3 Code.** One thread needs a decision, another is working, and older work is settled. T3 Code [can surface Codex questions](https://github.com/pingdotgg/t3code/blob/322f6544dfad0a3c8a0c8cbecf2c7f7874b14268/docs/user/providers-codex.md#L79-L86); [settling a thread](https://github.com/pingdotgg/t3code/blob/322f6544dfad0a3c8a0c8cbecf2c7f7874b14268/docs/user/thread-sidebar.md#L162-L192) moves it out of the active list without deleting its history.
-2. **Decide compatibility, not whether to run a test.** Older app versions still send and expect v1 sync cursors, the tokens that let them resume syncing. The concept surfaces the choice in G2: keep the old behavior for one release while new clients opt into v2, or retire v1 now. The R1 answers that specific question.
-3. **Agents finish without routine interruptions.** In the fictional repo, agents implement the compatibility path, test that both clients can resume syncing, open a pull request, and merge only after required checks pass and an existing policy permits it. The compatibility answer grants no merge authority. The eligible finished thread moves to Settled, with its history intact. T3 Code's [pull-request watching](https://github.com/pingdotgg/t3code/blob/202d5b5616e3edf65706371e2b8a9c4f486d0a96/docs/user/source-control.md#L304-L320) is not itself automatic merge permission.
+| Time | What the viewer sees |
+|---|---|
+| 0:00–0:17 | **T3 Code:** one task and its conversation per thread. Sign-in work keeps running, help screens are settled with history kept, and a station-search decision moves to the top. |
+| 0:17–0:29 | **On a walk:** stop off the path, open the question, and tap **Later**. The thread still needs an answer. |
+| 0:29–1:02 | **Waiting for the Shinkansen, before boarding:** reopen the same thread. Ask **“Will search still work on older phones?”** with a suggested reply. After the answer comes back, choose **“Newer phones first”**, then confirm. Older phones keep the search they use today. |
+| 1:02–1:10.5 | **In conversation:** routine progress stays quiet. At a natural pause, open a quick manual check: no decisions waiting; agents are testing. |
+| 1:10.5–1:22 | **Later:** the answer is saved in the same thread. Checks pass; a separately authorized change is merged and the thread moves to Settled. Merged does not mean released to phones. |
 
 ## What's real vs. simulated
 
-This is a **film-only revision**. The [v0.1.0 demo package](https://github.com/sonozaki7/even-agent-bridge/releases/tag/v0.1.0) and optional local read-only bridge are unchanged. The package does not implement the compatibility prompt, R1 answers to real threads, background notifications, or automatic merges.
-
-- The workspace and mobile screens are illustrative interfaces, not captures of the shipped T3 Code UI.
-- The green heads-up display is a cinematic visualization, not a measurement of the actual field of view. Ring selection, confirmation, notification delivery, and resumed work are simulated. No hardware or production integration was used in the film.
-- The G2 and R1 are **AI-generated product illustrations** using [Even G2](https://www.evenrealities.com/smart-glasses) and [Even R1](https://www.evenrealities.com/en-GB/smart-ring) product references for shape. Official photos are not redistributed. The lifestyle plates were also generated. See [visual production notes](../film/VISUALS.md).
-- **AI-generated narration** uses the local Kokoro English voice model. Original music and sound effects were synthesized for the film. No commercial songs or stock footage. See [audio production and credits](../film/AUDIO.md).
+- **T3 Code behavior:** separate [threads for each task](https://github.com/pingdotgg/t3code/blob/322f6544dfad0a3c8a0c8cbecf2c7f7874b14268/docs/user/thread-sidebar.md#L1-L23), [questions in a Codex thread](https://github.com/pingdotgg/t3code/blob/322f6544dfad0a3c8a0c8cbecf2c7f7874b14268/docs/user/providers-codex.md#L79-L86), and [Working and Settled states](https://github.com/pingdotgg/t3code/blob/322f6544dfad0a3c8a0c8cbecf2c7f7874b14268/docs/user/thread-sidebar.md#L134-L192). The real T3 list can surface other events, such as failures or finished work. The concept shows how a wearable could filter those down to decisions.
+- **Wearable interaction:** the text is a cinematic approximation of [Even G2’s green display](https://hub.evenrealities.com/docs/build/display). [Even R1 supports scroll and tap input](https://hub.evenrealities.com/docs/build/device-apis#inputs). The thread alert, deferral, suggested question, reply, decision, and receipt are simulated; no physical hardware, background delivery, locked-phone reliability, or recording was demonstrated.
+- **Permission:** the ring replies to the thread. It does not grant permission to merge or deploy. The fictional merge follows rules already in place, and the scenario does not depict a live release.
+- **Production:** this film uses a new script, visual sequence, original music, and generated imagery. No official product photos, stock footage, or app screenshots are redistributed. See [visual production notes](../film/VISUALS.md) and [audio production](../film/AUDIO.md).
+- **App status:** this is a film-only release. The [v0.1.0 app demo](https://github.com/sonozaki7/even-agent-bridge/releases/tag/v0.1.0) and read-only bridge are unchanged.
 
 ## Render again
 

@@ -6,10 +6,11 @@ via the [Kokoro MLX implementation](https://github.com/gabrimatic/kokoro-mlx).
 No voice was cloned and the narration does not represent an employee or
 spokesperson for T3 Code, OpenAI, Anthropic, or Even Realities.
 
-The score and interface sounds were composed for this film and synthesized
-from oscillators and seeded noise. The script builds the musical layers,
-notification tones, transitions, and final reveal; it does not use a commercial
-track, stock sound, or external speech service.
+The 82-second score is new for this cut. The script synthesizes a felt-key
+motif, soft pads, platform and room atmosphere, and a few interface tones
+from oscillators and seeded noise. The conversation scene has no alert tone.
+The film does not use a commercial track, stock sound, or external speech
+service.
 
 The ready-to-render stereo mix is `public/audio/master-mix.mp3`; the editable
 caption timeline is `src/captions.json`. To rebuild audio and subtitles on Apple
