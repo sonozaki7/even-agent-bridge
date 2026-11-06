@@ -1,0 +1,24 @@
+{
+  "name": "agent-relay-film",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio src/index.tsx",
+    "check": "tsc --noEmit",
+    "render": "remotion render src/index.tsx Landscape ../output/even-g2-t3-concept-16x9.mp4 --codec=h264 --crf=17 --concurrency=5",
+    "render:vertical": "remotion render src/index.tsx Portrait ../output/even-g2-t3-concept-9x16.mp4 --codec=h264 --crf=17 --concurrency=5",
+    "thumbnail": "remotion still src/index.tsx Cover ../output/thumbnail.png --frame=0"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "5.2.8",
+    "@fontsource/ibm-plex-mono": "5.2.7",
+    "@remotion/cli": "4.0.541",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.541"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.2",
+    "typescript": "5.9.3"
+  }
+}

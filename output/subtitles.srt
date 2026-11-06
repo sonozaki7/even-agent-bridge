@@ -1,0 +1,59 @@
+1
+00:00:00,430 --> 00:00:03,160
+AI coding agents can work without you watching.
+
+2
+00:00:03,400 --> 00:00:05,230
+So why are we still tied to a desk?
+
+3
+00:00:06,410 --> 00:00:09,590
+Picture this. In T3 Code, I start three agents.
+
+4
+00:00:09,990 --> 00:00:12,580
+One builds, one tests, and one reviews.
+
+5
+00:00:14,290 --> 00:00:15,440
+Then I walk away.
+
+6
+00:00:16,000 --> 00:00:18,800
+With Even G2, I'd see which agent needs me,
+
+7
+00:00:18,880 --> 00:00:20,330
+right in my field of view.
+
+8
+00:00:21,630 --> 00:00:23,300
+Tests are done. What's next?
+
+9
+00:00:23,950 --> 00:00:27,370
+A tap on the R1 ring could select “Run final checks.”
+
+10
+00:00:28,270 --> 00:00:29,840
+The agent takes it from there.
+
+11
+00:00:31,560 --> 00:00:34,650
+No laptop. No phone. Just the update I need,
+
+12
+00:00:35,790 --> 00:00:36,780
+when I need it.
+
+13
+00:00:37,650 --> 00:00:39,180
+The rest of the day is mine.
+
+14
+00:00:41,490 --> 00:00:44,420
+Your agents keep working. Your world keeps moving.
+
+15
+00:00:45,590 --> 00:00:48,900
+That's the experience I want to build for Even Realities.

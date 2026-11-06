@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#111612" />
+    <meta name="description" content="A glanceable companion concept for T3 Code and Even G2." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23a9f58b' d='M12 2 22 12 12 22 2 12Z'/%3E%3C/svg%3E" />
+    <title>Agent Relay · T3 Code companion</title>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="intro">
+        <div class="eyebrow"><span class="mark" aria-hidden="true"></span> T3 CODE COMPANION CONCEPT</div>
+        <h1>Agent Relay</h1>
+        <p>Stay with your day. See which coding thread needs you.</p>
+      </header>
+      <section class="console" aria-labelledby="panel-title">
+        <div class="console-top">
+          <h2 id="panel-title">G2 display preview</h2>
+          <span class="mode" id="mode-badge">Demo</span>
+        </div>
+        <div class="display" aria-label="Display contents" aria-live="polite" aria-atomic="true">
+          <p class="display-heading" id="display-heading"></p>
+          <p class="display-kicker" id="display-kicker"></p>
+          <p class="display-body" id="display-body"></p>
+          <p class="display-controls" id="display-controls"></p>
+        </div>
+        <div class="controls" aria-label="Preview controls" role="group">
+          <button type="button" id="up">Previous</button>
+          <button type="button" id="down">Next</button>
+          <button type="button" id="press" class="primary">View thread</button>
+          <button type="button" id="back">Back</button>
+        </div>
+        <p class="panel-note" id="panel-note">Sample data. No commands are sent.</p>
+      </section>
+      <footer>
+        <span id="host-status" role="status">Browser preview · Even Hub not connected</span>
+        <a id="mode-link" href="?source=t3">Try local read-only relay</a>
+      </footer>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

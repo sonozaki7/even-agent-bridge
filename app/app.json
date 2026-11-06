@@ -1,0 +1,10 @@
+{
+  "package_id": "com.sonozaki7.agentrelay",
+  "edition": "202601",
+  "name": "Agent Relay",
+  "version": "0.1.0",
+  "min_sdk_version": "0.0.16",
+  "entrypoint": "index.html",
+  "permissions": [],
+  "supported_languages": ["en"]
+}

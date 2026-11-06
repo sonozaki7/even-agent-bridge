@@ -1,0 +1,16 @@
+.DS_Store
+node_modules/
+dist/
+.cache/
+.tmp/
+coverage/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+*.local
+*.ehpk
+output/*
+!output/README.md
+!output/subtitles.srt
+!output/thumbnail.png

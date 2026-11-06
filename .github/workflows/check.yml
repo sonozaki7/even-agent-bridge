@@ -1,0 +1,24 @@
+name: Check source
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+      - run: npm --prefix app ci
+      - run: npm --prefix app test
+      - run: npm --prefix app run pack
+      - run: npm exec --prefix app -- playwright install --with-deps chromium
+      - run: npm --prefix app run test:ui
+      - run: npm --prefix bridge test
+      - run: npm --prefix film ci
+      - run: npm --prefix film run check
