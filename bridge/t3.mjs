@@ -87,9 +87,8 @@ function safeTitle(raw) {
 }
 
 function statusFor(thread) {
-  if (thread.pendingRuntimeRequest?.blocking !== false && thread.pendingRuntimeRequest != null) {
-    return 'attention';
-  }
+  // An async question still needs an answer even if Codex can keep working.
+  if (thread.pendingRuntimeRequest != null) return 'attention';
   if (thread.hasActionableProposedPlan || thread.pendingGuestMessageCount > 0) return 'attention';
   if (thread.status === 'failed') return 'error';
   if (thread.status === 'waiting') return thread.blockedOnThreadWait ? 'running' : 'attention';

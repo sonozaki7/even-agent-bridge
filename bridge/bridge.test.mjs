@@ -52,7 +52,11 @@ test('projects only glanceable fields; ranks interruptions first and never inclu
       thread('completed-id', 'completed', { title: 'Done', latestVisibleMessage: { text: 'private' } }),
       thread('progress-id', 'preparing', { title: 'Build', providerInstanceId: 'claude', worktreePath: '/private/path' }),
       thread('approval-id', 'running', { title: 'Review\u202e\n change', pendingRuntimeRequest: { blocking: true } }),
-      thread('optional-id', 'running', { title: 'Optional', pendingRuntimeRequest: { blocking: false }, updatedAt: '2026-11-06T05:01:00Z' }),
+      thread('async-question-id', 'running', {
+        title: 'Question while working',
+        pendingRuntimeRequest: { blocking: false },
+        updatedAt: '2026-11-06T05:01:00Z',
+      }),
       thread('waiting-id', 'waiting', { title: 'Waiting for subagent', blockedOnThreadWait: true }),
       thread('error-id', 'failed', { title: 'Retry later', providerInstanceId: 'private-instance-name', lastError: 'private error details' }),
       thread('archived-id', 'running', { archivedAt: now }),
@@ -64,9 +68,9 @@ test('projects only glanceable fields; ranks interruptions first and never inclu
     assert.match(id, /^[0-9a-f]{24}$/);
     return rest;
   }), [
+    { title: 'Question while working', provider: 'Codex', status: 'attention' },
     { title: 'Review change', provider: 'Codex', status: 'attention' },
     { title: 'Retry later', provider: 'Other agent', status: 'error' },
-    { title: 'Optional', provider: 'Codex', status: 'running' },
     { title: 'Build', provider: 'Claude Code', status: 'running' },
     { title: 'Waiting for subagent', provider: 'Codex', status: 'running' },
     { title: 'Done', provider: 'Codex', status: 'complete' },
