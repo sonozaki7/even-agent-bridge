@@ -1,11 +1,16 @@
 import { strict as assert } from "node:assert";
-import { access } from "node:fs/promises";
+import { access, mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { setTimeout as delay } from "node:timers/promises";
 import { chromium } from "playwright";
-import { createServer } from "vite";
+import { build, createServer, preview } from "vite";
 
 const widths = [320, 375, 390, 768, 1024, 1440];
 const app = await createServer({ server: { host: "127.0.0.1", port: 0 } });
 let browser;
+let deviceServer;
+let deviceDir;
 try {
   await app.listen();
   const base = app.resolvedUrls.local[0];
@@ -64,6 +69,10 @@ try {
   await page.getByRole("button", { name: "Cancel" }).click();
   await expectText("#display-body", "Tests complete. Next step?");
   await page.getByRole("button", { name: "Run final checks" }).click();
+  await page.evaluate(() => document.dispatchEvent(new Event("visibilitychange")));
+  await expectText("#display-body", "Confirmation cancelled");
+  assert.equal(await page.getByRole("button", { name: "Confirm demo" }).count(), 0);
+  await page.getByRole("button", { name: "Run final checks" }).click();
   await page.getByRole("button", { name: "Confirm demo" }).click();
   await expectText("#display-body", "final checks started");
   await expectText("#display-body", "final checks complete");
@@ -92,11 +101,14 @@ try {
   native.setDefaultTimeout(7_000);
   await native.addInitScript(() => {
     window.bridgeCalls = [];
+    window.rejectTextUpdates = false;
     window.flutter_inappwebview = {
       callHandler: async (handler, raw) => {
         const message = JSON.parse(raw);
         window.bridgeCalls.push({ handler, ...message });
-        return message.method === "createStartUpPageContainer" ? 0 : true;
+        if (message.method === "createStartUpPageContainer") return 0;
+        if (message.method === "textContainerUpgrade" && window.rejectTextUpdates) return false;
+        return true;
       },
     };
   });
@@ -106,7 +118,16 @@ try {
     }),
     { type, jsonData },
   );
-  await native.goto(base);
+  // Test the compiled device-only build, including a deliberate relay query.
+  deviceDir = await mkdtemp(join(tmpdir(), "agent-relay-device-"));
+  await build({ mode: "evenhub", build: { outDir: deviceDir }, logLevel: "error" });
+  deviceServer = await preview({ build: { outDir: deviceDir }, preview: { host: "127.0.0.1", port: 0 } });
+  const deviceUrl = deviceServer.resolvedUrls.local[0];
+  let deviceRequests = 0;
+  await native.route("**/api/status", (route) => { deviceRequests++; return route.abort(); });
+  await native.goto(`${deviceUrl}?source=t3`);
+  await expectText("#display-heading", "DEMO", native);
+  assert.equal(await native.locator("#mode-link").isHidden(), true);
   await expectText("#host-status", "Even Hub connected", native);
   const startup = (await native.evaluate(() => window.bridgeCalls))[0];
   assert.equal(startup.handler, "evenAppMessage");
@@ -118,6 +139,19 @@ try {
   await expectText("#display-body", "> Run tests", native);
   await emit("textEvent", { containerID: 3, containerName: "body" });
   await expectText("#display-body", "Tests complete. Next step?", native);
+  await delay(500);
+  await emit("sysEvent", { eventSource: 2 }); // R1 press with the zero event type omitted
+  await expectText("#display-kicker", "SIMULATED ACTION", native);
+  await emit("sysEvent", { eventSource: 2 }); // duplicate must not confirm
+  await expectText("#display-kicker", "SIMULATED ACTION", native);
+  await native.evaluate(() => { window.rejectTextUpdates = true; });
+  await emit("sysEvent", { eventType: 4 }); // Even's contextual menu takes over the display
+  await expectText("#display-body", "Confirmation cancelled", native);
+  await expectText("#host-status", "display update failed", native);
+  await native.evaluate(() => { window.rejectTextUpdates = false; });
+  await emit("sysEvent", { eventType: 5 }); // Overlay dismissed: re-paint the cancelled state
+  await expectText("#host-status", "Even Hub connected", native);
+  assert.equal(await native.getByRole("button", { name: "Confirm demo" }).count(), 0);
   // Device double press backs out and then shows the native exit confirmation.
   await emit("sysEvent", { eventType: 3, eventSource: 2 });
   await expectText("#display-kicker", "THREADS", native);
@@ -127,10 +161,24 @@ try {
   assert.equal(calls.find(({ method }) => method === "shutDownPageContainer").data.exitMode, 1);
   assert.ok(calls.some(({ method, data }) => method === "textContainerUpgrade" &&
     data.containerName === "body" && data.content.includes("Tests complete")));
+  assert.equal(deviceRequests, 0, "the Even build must not request the relay");
   await native.close();
+
+  const rejected = await browser.newPage();
+  await rejected.addInitScript(() => {
+    window.flutter_inappwebview = { callHandler: async () => 1 }; // invalid startup
+  });
+  await rejected.goto(deviceUrl);
+  await expectText("#host-status", "Even Hub unavailable", rejected);
+  await rejected.getByRole("button", { name: "Next", exact: true }).click();
+  await rejected.getByRole("button", { name: "View thread" }).click();
+  await expectText("#display-body", "Tests complete. Next step?", rejected);
+  await rejected.close();
 
   console.log(`Phone UI and SDK transport checks passed at ${widths.join(", ")} CSS pixels.`);
 } finally {
   await browser?.close();
+  await deviceServer?.close();
+  if (deviceDir) await rm(deviceDir, { recursive: true, force: true });
   await app.close();
 }

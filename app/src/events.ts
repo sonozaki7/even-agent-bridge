@@ -22,6 +22,13 @@ export function decodeInput(event: SimpleEvent): Input | undefined {
   }
 }
 
+export function isOverlayChange(event: SimpleEvent): boolean {
+  const type = event.sysEvent?.eventType;
+  // The native contextual menu emits these for its own open/close. They do not
+  // tell us that the phone WebView was suspended (handled via visibilitychange).
+  return type === OsEventTypeList.FOREGROUND_ENTER_EVENT || type === OsEventTypeList.FOREGROUND_EXIT_EVENT;
+}
+
 export function createInputGate() {
   let lastPress = Number.NEGATIVE_INFINITY;
   return (input: Input, now: number): boolean => {

@@ -5,7 +5,7 @@ import {
   TextContainerUpgrade,
   waitForEvenAppBridge,
 } from "@evenrealities/even_hub_sdk";
-import { decodeInput } from "./events";
+import { decodeInput, isOverlayChange } from "./events";
 import type { Input } from "./model";
 import type { Screen } from "./display";
 
@@ -34,6 +34,7 @@ export function nativeLayout(screen: Screen): CreateStartUpPageContainer {
 export async function connectEven(
   getScreen: () => Screen,
   onInput: (input: Input) => void,
+  onOverlayChange: () => void,
   setHostStatus: (message: string) => void,
 ) {
   // Remain usable as a standalone browser preview while waiting for an Even host.
@@ -44,11 +45,16 @@ export async function connectEven(
     throw new Error("Even Hub rejected the initial display");
   }
   const unsubscribe = bridge.onEvenHubEvent((event) => {
+    if (isOverlayChange(event)) {
+      onOverlayChange();
+      return;
+    }
     const input = decodeInput(event);
     if (input) onInput(input);
   });
-  window.addEventListener("pagehide", unsubscribe, { once: true });
-  setHostStatus("Even Hub connected · Display and touch input");
+  window.addEventListener("pagehide", (event) => { if (!event.persisted) unsubscribe(); });
+  const connectedMessage = "Even Hub connected · Display and touch input";
+  setHostStatus(connectedMessage);
   console.info("[agent-relay] ready");
 
   let last = initial;
@@ -59,9 +65,11 @@ export async function connectEven(
     pending = screen;
     if (rendering) return;
     rendering = true;
+    let target = screen;
     try {
       while (pending) {
         const next = pending;
+        target = next;
         pending = undefined;
         for (const { key, id } of boxes) {
           if (last[key] !== next[key]) {
@@ -76,6 +84,7 @@ export async function connectEven(
           }
         }
       }
+      if (boxes.every(({ key }) => last[key] === target[key])) setHostStatus(connectedMessage);
     } catch {
       setHostStatus("Even Hub display update failed");
     } finally {

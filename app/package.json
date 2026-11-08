@@ -1,6 +1,6 @@
 {
   "name": "even-agent-bridge",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "private": true,
   "type": "module",
   "engines": {
@@ -11,8 +11,10 @@
     "build": "tsc --noEmit && vite build",
     "test": "tsx --test test/*.test.ts",
     "test:ui": "node scripts/check-ui.mjs",
-    "pack": "npm run build && evenhub pack app.json dist --sdk-ver 0.0.16 -o agent-relay.ehpk",
-    "simulator": "node node_modules/@evenrealities/evenhub-simulator/bin/index.js"
+    "pack": "npm run build:device && evenhub pack app.json dist-even --sdk-ver 0.0.16 -o agent-relay.ehpk",
+    "simulator": "node node_modules/@evenrealities/evenhub-simulator/bin/index.js",
+    "dev:device": "vite --mode evenhub",
+    "build:device": "tsc --noEmit && vite build --mode evenhub --outDir dist-even"
   },
   "dependencies": {
     "@evenrealities/even_hub_sdk": "0.0.16"

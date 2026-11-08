@@ -83,6 +83,14 @@ export function advance(state: State, now: number): State {
   return state;
 }
 
+// Closing the phone view or opening an OS overlay invalidates an unconfirmed choice.
+export function afterSurfaceChange(previous: State, now: number): State {
+  const state = advance(previous, now);
+  return state.page === "confirm"
+    ? { ...state, page: "detail", confirmUntil: 0, notice: "Confirmation cancelled." }
+    : state;
+}
+
 export function interact(previous: State, input: Input, now: number): { state: State; exit: boolean } {
   const state = advance(previous, now);
   // A press after expiry is not allowed to reopen and confirm in the same step.

@@ -50,7 +50,14 @@ const list = await screenshot();
 const testsSelected = await transition("down", list);
 const detail = await transition("click", testsSelected);
 await delay(500);
-const confirmation = await transition("click", detail);
+const firstConfirmation = await transition("click", detail);
+const expired = await retry(async () => {
+  const image = await screenshot();
+  return !image.equals(firstConfirmation) ? image : false;
+}, "confirmation expiry without an input");
+assert.notDeepEqual(expired, detail, "expiry should display the expiry notice");
+const confirmation = await transition("click", expired);
+assert.deepEqual(confirmation, firstConfirmation, "a new press after expiry must request confirmation again");
 const back = await transition("double_click", confirmation);
 assert.deepEqual(back, detail, "cancelled confirmation should return to the unchanged thread");
 await delay(500);
@@ -69,4 +76,4 @@ const complete = await retry(async () => {
 const finalList = await transition("double_click", complete);
 await delay(500);
 await transition("double_click", finalList);
-console.log("Official Even Hub simulator: framebuffer, swipe, press, cancel, simulated run, back and exit checks passed.");
+console.log("Official Even Hub simulator: framebuffer, swipe, press, expiry, cancel, simulated run, back and exit checks passed.");

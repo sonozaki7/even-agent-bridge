@@ -11,7 +11,7 @@ import { getScreen } from "../src/display";
 import { nativeLayout } from "../src/even";
 import { createInputGate, decodeInput } from "../src/events";
 import {
-  advance, initialState, interact, parseStatusPayload, selectedAgent, setOffline, updateAgents,
+  advance, afterSurfaceChange, initialState, interact, parseStatusPayload, selectedAgent, setOffline, updateAgents,
   type Input, type State,
 } from "../src/model";
 
@@ -46,6 +46,17 @@ test("back cancels a demo action; expired confirmations do not execute", () => {
   assert.equal(selectedAgent(late)?.status, "attention");
   assert.match(late.notice, /expired/);
   assert.equal(interact(step(cancelled, "back"), "back", 1_200).exit, true);
+});
+
+test("a native overlay or suspended phone cancels a pending choice but reconciles an already-confirmed run", () => {
+  const pending = step(openTests(), "press", 1_000);
+  const cancelled = afterSurfaceChange(pending, 1_100);
+  assert.equal(cancelled.page, "detail");
+  assert.equal(selectedAgent(cancelled)?.status, "attention");
+  assert.equal(afterSurfaceChange(cancelled, 2_000), cancelled);
+  const running = step(pending, "press", 1_500);
+  const resumed = afterSurfaceChange(running, 120_000);
+  assert.equal(selectedAgent(resumed)?.status, "complete");
 });
 
 test("T3 mode never allows a command, even for a thread that matches the demo ID", () => {

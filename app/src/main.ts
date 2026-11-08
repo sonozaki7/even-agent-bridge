@@ -1,13 +1,15 @@
 import "./style.css";
 import {
-  advance, initialState, interact, isSimulatedActionAvailable, parseStatusPayload,
+  advance, afterSurfaceChange, initialState, interact, isSimulatedActionAvailable, parseStatusPayload,
   selectedAgent, setOffline, updateAgents, type Input, type Mode,
 } from "./model";
 import { getScreen } from "./display";
 import { connectEven } from "./even";
 import { createInputGate } from "./events";
 
-const mode: Mode = new URLSearchParams(location.search).get("source") === "t3" ? "t3" : "demo";
+// The installable package and hardware QR preview cannot enter relay mode.
+const deviceBuild = import.meta.env.MODE === "evenhub";
+const mode: Mode = !deviceBuild && new URLSearchParams(location.search).get("source") === "t3" ? "t3" : "demo";
 const buttons = {
   up: document.querySelector<HTMLButtonElement>("#up")!,
   down: document.querySelector<HTMLButtonElement>("#down")!,
@@ -24,6 +26,7 @@ const hostStatus = document.getElementById("host-status")!;
 const badge = document.getElementById("mode-badge")!;
 const modeLink = document.querySelector<HTMLAnchorElement>("#mode-link")!;
 const note = document.getElementById("panel-note")!;
+modeLink.hidden = deviceBuild;
 let state = initialState(mode);
 let hardware: Awaited<ReturnType<typeof connectEven>> | undefined;
 let clockTimer: ReturnType<typeof setTimeout> | undefined;
@@ -50,19 +53,26 @@ function render() {
   const next = [state.confirmUntil, state.demoFinishAt].filter((at) => at > 0);
   if (next.length > 0) {
     clockTimer = setTimeout(() => {
-      state = advance(state, performance.now());
+      state = advance(state, Date.now());
       render();
-    }, Math.max(1, Math.ceil(Math.min(...next) - performance.now())));
+    }, Math.max(1, Math.ceil(Math.min(...next) - Date.now())));
   }
 }
 
 function onInput(input: Input, native = false) {
-  const now = performance.now();
-  if (native && !acceptsDeviceInput(input, now)) return;
-  const result = interact(state, input, now);
+  if (native && !acceptsDeviceInput(input, performance.now())) return;
+  const result = interact(state, input, Date.now());
   state = result.state;
   render();
   if (result.exit && native) void hardware?.exit();
+}
+
+function handleSurfaceChange() {
+  if (mode !== "demo") return;
+  state = afterSurfaceChange(state, Date.now());
+  // A display update may have been rejected while the menu owned the screen.
+  // Re-submit on close/resume even if the model has not changed again.
+  render();
 }
 
 buttons.up.addEventListener("click", () => onInput("up"));
@@ -114,13 +124,18 @@ if (mode === "t3") {
     } else void refresh();
   });
   void refresh();
+} else {
+  // Locking the phone can pause timer callbacks. Recheck deadlines on return and
+  // never keep an unconfirmed prompt open across a visibility change.
+  document.addEventListener("visibilitychange", handleSurfaceChange);
 }
 
 render();
-void connectEven(() => getScreen(state), (input) => onInput(input, true), (message) => {
+void connectEven(() => getScreen(state), (input) => onInput(input, true), handleSurfaceChange, (message) => {
   setText(hostStatus, message);
 }).then((connected) => {
   hardware = connected;
+  modeLink.hidden = true;
   render();
 }).catch(() => {
   setText(hostStatus, "Even Hub unavailable · Browser preview still works");
